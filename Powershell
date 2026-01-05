@@ -1,0 +1,36 @@
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+
+using namespace std;
+
+int main() {
+    string command;
+    ofstream logFile("command_log.txt", ios::app);
+
+    if (!logFile) {
+        cerr << "Error: Unable to open log file." << endl;
+        return 1;
+    }
+
+    cout << "Simple Command Runner (type 'exit' to quit)\n";
+
+    while (true) {
+        cout << ">> ";
+        getline(cin, command);
+
+        if (command == "exit") {
+            cout << "Exiting shell...\n";
+            break;
+        }
+
+        logFile << "Executed command: " << command << endl;
+
+        int result = system(command.c_str());
+
+        if (result != 0) {
+            cerr << "Error: Command execution failed." << endl;
+        }
+    }
+
+    logFile.close();
